@@ -1,0 +1,18 @@
+version: '3'
+services:
+  psql:
+    image: postgres:latest
+    environment:
+      POSTGRES_DB: ams-system
+      POSTGRES_USER: ams
+      POSTGRES_PASSWORD: 26538hsvgn8p
+
+  app:
+    build: .
+    ports:
+      - "8080:8080"
+    environment:
+      - CONFIG_PATH=./config/
+      - ENV=dev
+    depends_on:
+      - psql
