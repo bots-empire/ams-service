@@ -39,6 +39,9 @@ func (a *Access) Validate(userInfo bool) error {
 func (a *Access) MergeAccess(newRules *Access) {
 	if len(a.Additional) != 0 {
 		a.Additional = mergeStringArray(a.Additional, newRules.Additional)
+		if len(newRules.Additional) == 0 {
+			a.Additional = nil
+		}
 	} else {
 		a.Additional = newRules.Additional
 	}
