@@ -43,6 +43,7 @@ func main() {
 	var mux = http.NewServeMux()
 	v1.HandleRouts(mux, manager, logger)
 	httpServer := httpserver.New(mux, httpserver.Port(cfg.ServicePort))
+	logger.Sugar().Infof("server started on %s port", cfg.ServicePort)
 
 	// Waiting signal
 	interrupt := make(chan os.Signal, 1)

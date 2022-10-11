@@ -1,18 +1,24 @@
 version: '3'
 services:
-  psql:
+  psql-ams:
     image: postgres:latest
     environment:
-      POSTGRES_DB: ams-system
-      POSTGRES_USER: ams
+      POSTGRES_DB: ams-service
+      POSTGRES_USER: ams-user
       POSTGRES_PASSWORD: 26538hsvgn8p
+      PGDATA: "/var/lib/postgresql/data/pgdata"
+    volumes:
+      - ./dbdata:/var/lib/postgresql/data
+      - ./docker-entrypoint-initdb.d:/docker-entrypoint-initdb.d
+    ports:
+      - "3232:5432"
 
   app:
     build: .
     ports:
-      - "8080:8080"
+      - "9033:9033"
+      - "8012:8012"
     environment:
-      - CONFIG_PATH=./config/
-      - ENV=dev
+      - CONFIG_PATH=./config/config.yaml
     depends_on:
-      - psql
+      - psql-ams

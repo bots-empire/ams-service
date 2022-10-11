@@ -46,6 +46,7 @@ func accessRouts(mux *http.ServeMux, m *service.Manager, logger *zap.Logger) {
 			return
 		}
 	})
+	logger.Sugar().Info("hadle rout: /v1/accesses/check")
 
 	mux.HandleFunc("/v1/accesses/add", func(w http.ResponseWriter, req *http.Request) {
 		acs, err := accessesFromRequest(req)
@@ -68,6 +69,7 @@ func accessRouts(mux *http.ServeMux, m *service.Manager, logger *zap.Logger) {
 			return
 		}
 	})
+	logger.Sugar().Info("hadle rout: /v1/accesses/add")
 
 	mux.HandleFunc("/v1/accesses/deprive", func(w http.ResponseWriter, req *http.Request) {
 		acs, err := accessesFromRequest(req)
@@ -82,6 +84,7 @@ func accessRouts(mux *http.ServeMux, m *service.Manager, logger *zap.Logger) {
 			return
 		}
 	})
+	logger.Sugar().Info("hadle rout: /v1/accesses/deprive")
 }
 
 func usersRouts(mux *http.ServeMux, m *service.Manager, logger *zap.Logger) {
@@ -107,6 +110,19 @@ func usersRouts(mux *http.ServeMux, m *service.Manager, logger *zap.Logger) {
 
 		w.Write(marshalResponse(ids))
 	})
+	logger.Sugar().Info("hadle rout: /v1/admins/get")
+
+	mux.HandleFunc("/debug/admins/get-all", func(w http.ResponseWriter, req *http.Request) {
+		admins, err := m.GetAllAdmins(context.Background())
+		if err != nil {
+			logger.Warn("error get all admins", zap.Any("err", err))
+			http.Error(w, fmt.Sprintf("failed check access: %v", err), http.StatusInternalServerError)
+			return
+		}
+
+		w.Write(marshalResponse(admins))
+	})
+	logger.Sugar().Info("hadle rout: /debug/admins/get-all")
 }
 
 func accessesFromRequest(req *http.Request) (*entity.Access, error) {

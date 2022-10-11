@@ -14,6 +14,8 @@ type Implementation interface {
 	Update(ctx context.Context, access *entity.Access) error
 
 	GetUsersByQuery(ctx context.Context, access *entity.AdminsQuery) ([]int64, error)
+
+	GetAllAccess(ctx context.Context) ([]*entity.Access, error)
 }
 
 type Storage struct {

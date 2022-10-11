@@ -19,3 +19,14 @@ func (m *Manager) GetAdminsID(ctx context.Context, query *entity.AdminsQuery) ([
 
 	return ids, nil
 }
+
+func (m *Manager) GetAllAdmins(ctx context.Context) ([]*entity.Access, error) {
+	m.logger.Info("get all admins")
+
+	ids, err := m.storage.GetAllAccess(ctx)
+	if err != nil {
+		return nil, errors.Wrap(err, "get from db")
+	}
+
+	return ids, nil
+}
