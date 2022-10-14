@@ -16,6 +16,9 @@ type Implementation interface {
 	GetUsersByQuery(ctx context.Context, access *entity.AdminsQuery) ([]int64, error)
 
 	GetAllAccess(ctx context.Context) ([]*entity.Access, error)
+
+	SaveIncomeInfo(ctx context.Context, info *entity.IncomeInfo) error
+	GetIncomeInfoByID(ctx context.Context, userID int64, botType string) (*entity.IncomeInfo, error)
 }
 
 type Storage struct {

@@ -16,6 +16,8 @@ func HandleRouts(mux *http.ServeMux, m *service.Manager, logger *zap.Logger) {
 	accessRouts(mux, m, logger)
 
 	usersRouts(mux, m, logger)
+
+	incomeInfoRouts(mux, m, logger)
 }
 
 func accessRouts(mux *http.ServeMux, m *service.Manager, logger *zap.Logger) {
@@ -123,6 +125,64 @@ func usersRouts(mux *http.ServeMux, m *service.Manager, logger *zap.Logger) {
 		w.Write(marshalResponse(admins))
 	})
 	logger.Sugar().Info("hadle rout: /debug/admins/get-all")
+}
+
+func incomeInfoRouts(mux *http.ServeMux, m *service.Manager, logger *zap.Logger) {
+	mux.HandleFunc("/v1/income-info/add", func(w http.ResponseWriter, req *http.Request) {
+		incInfo, err := incomeInfoFromRequest(req)
+		if err != nil {
+			logger.Warn("error parse entity", zap.Any("err", err))
+			http.Error(w, fmt.Sprintf("failed to parse entity: %v", err), http.StatusUnprocessableEntity)
+			return
+		}
+
+		if err = incInfo.Validate(); err != nil {
+			logger.Warn("error validate income info", zap.Any("err", err))
+			http.Error(w, fmt.Sprintf("error in validate income info: %v", err), http.StatusUnprocessableEntity)
+			return
+		}
+
+		err = m.AddIncomeInfo(context.Background(), incInfo)
+		if err != nil {
+			logger.Warn("error add income info", zap.Any("err", err))
+			http.Error(w, fmt.Sprintf("failed add income info: %v", err), http.StatusInternalServerError)
+			return
+		}
+	})
+	logger.Sugar().Info("hadle rout: /v1/income-info/add")
+
+	mux.HandleFunc("/v1/income-info/get", func(w http.ResponseWriter, req *http.Request) {
+		query, err := incomeInfoFromRequest(req)
+		if err != nil {
+			http.Error(w, fmt.Sprintf("failed to parse query: %v", err), http.StatusUnprocessableEntity)
+			return
+		}
+
+		if err = query.Validate(); err != nil {
+			logger.Warn("error validate query", zap.Any("err", err))
+			http.Error(w, fmt.Sprintf("error in validate query: %v", err), http.StatusUnprocessableEntity)
+			return
+		}
+
+		ids, err := m.GetIncomeInfo(context.Background(), query.UserID, query.TypeBot)
+		if err != nil {
+			logger.Warn("error get income info", zap.Any("err", err))
+			http.Error(w, fmt.Sprintf("failed check income info: %v", err), http.StatusInternalServerError)
+			return
+		}
+
+		w.Write(marshalResponse(ids))
+	})
+	logger.Sugar().Info("hadle rout: /v1/income-info/get")
+}
+
+func incomeInfoFromRequest(req *http.Request) (*entity.IncomeInfo, error) {
+	decoder := json.NewDecoder(req.Body)
+	var i entity.IncomeInfo
+	if err := decoder.Decode(&i); err != nil {
+		return nil, err
+	}
+	return &i, nil
 }
 
 func accessesFromRequest(req *http.Request) (*entity.Access, error) {
