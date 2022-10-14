@@ -10,7 +10,7 @@ type IncomeInfo struct {
 	TypeBot      string `json:"type_bot,omitempty"`
 }
 
-func (i *IncomeInfo) Validate(userInfo bool) error {
+func (i *IncomeInfo) Validate() error {
 	if i.UserID == 0 {
 		return fmt.Errorf("user_id is empty")
 	}

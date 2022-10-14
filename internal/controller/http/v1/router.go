@@ -138,14 +138,14 @@ func incomeInfoRouts(mux *http.ServeMux, m *service.Manager, logger *zap.Logger)
 
 		if err = incInfo.Validate(true); err != nil {
 			logger.Warn("error validate income info", zap.Any("err", err))
-			http.Error(w, fmt.Sprintf("error in validate access: %v", err), http.StatusUnprocessableEntity)
+			http.Error(w, fmt.Sprintf("error in validate income info: %v", err), http.StatusUnprocessableEntity)
 			return
 		}
 
-		err = m.AddIncomeInfo(context.Background(), incInfo) // todo another function
+		err = m.AddIncomeInfo(context.Background(), incInfo)
 		if err != nil {
 			logger.Warn("error add income info", zap.Any("err", err))
-			http.Error(w, fmt.Sprintf("failed add access: %v", err), http.StatusInternalServerError)
+			http.Error(w, fmt.Sprintf("failed add income info: %v", err), http.StatusInternalServerError)
 			return
 		}
 	})
