@@ -6,7 +6,7 @@ CREATE TABLE IF NOT EXISTS ams.income_info
     bot_link      text NOT NULL,
     bot_name      text NOT NULL,
     income_source text NOT NULL,
-    type_bot      text NOT NULL,
+    type_bot      text NOT NULL
 );
 
 CREATE UNIQUE INDEX info_uniq

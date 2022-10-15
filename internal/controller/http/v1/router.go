@@ -136,7 +136,7 @@ func incomeInfoRouts(mux *http.ServeMux, m *service.Manager, logger *zap.Logger)
 			return
 		}
 
-		if err = incInfo.Validate(); err != nil {
+		if err = incInfo.ValidateAdd(); err != nil {
 			logger.Warn("error validate income info", zap.Any("err", err))
 			http.Error(w, fmt.Sprintf("error in validate income info: %v", err), http.StatusUnprocessableEntity)
 			return
@@ -158,7 +158,7 @@ func incomeInfoRouts(mux *http.ServeMux, m *service.Manager, logger *zap.Logger)
 			return
 		}
 
-		if err = query.Validate(); err != nil {
+		if err = query.ValidateGet(); err != nil {
 			logger.Warn("error validate query", zap.Any("err", err))
 			http.Error(w, fmt.Sprintf("error in validate query: %v", err), http.StatusUnprocessableEntity)
 			return

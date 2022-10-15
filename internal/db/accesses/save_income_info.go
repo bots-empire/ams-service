@@ -6,7 +6,7 @@ import (
 	"github.com/pkg/errors"
 )
 
-const saveIncomeInfoQuery = `INSERT INTO ams.accesses (user_id, bot_link, bot_name, income_source, type_bot) 
+const saveIncomeInfoQuery = `INSERT INTO ams.income_info (user_id, bot_link, bot_name, income_source, type_bot) 
 VALUES ($1, $2, $3, $4, $5)
 	ON CONFLICT (user_id, bot_link) DO UPDATE SET bot_name = $3, income_source = $4, type_bot = $5;`
 
