@@ -9,7 +9,6 @@ import (
 )
 
 type Implementation interface {
-	GetAll(ctx context.Context, userID int64) ([]*entity.Access, error)
 	GetByCode(ctx context.Context, userID int64, code string) (*entity.Access, error)
 	Update(ctx context.Context, access *entity.Access) error
 
@@ -18,7 +17,8 @@ type Implementation interface {
 	GetAllAccess(ctx context.Context) ([]*entity.Access, error)
 
 	SaveIncomeInfo(ctx context.Context, info *entity.IncomeInfo) error
-	GetIncomeInfoByID(ctx context.Context, userID int64, botType string) (*entity.IncomeInfo, error)
+	GetIncomeInfoByID(ctx context.Context, userID int64, botType string) ([]*entity.IncomeInfo, error)
+	GetAllIncomeInfo(ctx context.Context) ([]*entity.IncomeInfo, error)
 }
 
 type Storage struct {

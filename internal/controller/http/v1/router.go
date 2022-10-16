@@ -48,7 +48,7 @@ func accessRouts(mux *http.ServeMux, m *service.Manager, logger *zap.Logger) {
 			return
 		}
 	})
-	logger.Sugar().Info("hadle rout: /v1/accesses/check")
+	logger.Sugar().Info("handle rout: /v1/accesses/check")
 
 	mux.HandleFunc("/v1/accesses/add", func(w http.ResponseWriter, req *http.Request) {
 		acs, err := accessesFromRequest(req)
@@ -71,7 +71,7 @@ func accessRouts(mux *http.ServeMux, m *service.Manager, logger *zap.Logger) {
 			return
 		}
 	})
-	logger.Sugar().Info("hadle rout: /v1/accesses/add")
+	logger.Sugar().Info("handle rout: /v1/accesses/add")
 
 	mux.HandleFunc("/v1/accesses/deprive", func(w http.ResponseWriter, req *http.Request) {
 		acs, err := accessesFromRequest(req)
@@ -86,7 +86,7 @@ func accessRouts(mux *http.ServeMux, m *service.Manager, logger *zap.Logger) {
 			return
 		}
 	})
-	logger.Sugar().Info("hadle rout: /v1/accesses/deprive")
+	logger.Sugar().Info("handle rout: /v1/accesses/deprive")
 }
 
 func usersRouts(mux *http.ServeMux, m *service.Manager, logger *zap.Logger) {
@@ -112,7 +112,7 @@ func usersRouts(mux *http.ServeMux, m *service.Manager, logger *zap.Logger) {
 
 		w.Write(marshalResponse(ids))
 	})
-	logger.Sugar().Info("hadle rout: /v1/admins/get")
+	logger.Sugar().Info("handle rout: /v1/admins/get")
 
 	mux.HandleFunc("/debug/admins/get-all", func(w http.ResponseWriter, req *http.Request) {
 		admins, err := m.GetAllAdmins(context.Background())
@@ -124,7 +124,7 @@ func usersRouts(mux *http.ServeMux, m *service.Manager, logger *zap.Logger) {
 
 		w.Write(marshalResponse(admins))
 	})
-	logger.Sugar().Info("hadle rout: /debug/admins/get-all")
+	logger.Sugar().Info("handle rout: /debug/admins/get-all")
 }
 
 func incomeInfoRouts(mux *http.ServeMux, m *service.Manager, logger *zap.Logger) {
@@ -149,7 +149,7 @@ func incomeInfoRouts(mux *http.ServeMux, m *service.Manager, logger *zap.Logger)
 			return
 		}
 	})
-	logger.Sugar().Info("hadle rout: /v1/income-info/add")
+	logger.Sugar().Info("handle rout: /v1/income-info/add")
 
 	mux.HandleFunc("/v1/income-info/get", func(w http.ResponseWriter, req *http.Request) {
 		query, err := incomeInfoFromRequest(req)
@@ -173,7 +173,19 @@ func incomeInfoRouts(mux *http.ServeMux, m *service.Manager, logger *zap.Logger)
 
 		w.Write(marshalResponse(ids))
 	})
-	logger.Sugar().Info("hadle rout: /v1/income-info/get")
+	logger.Sugar().Info("handle rout: /v1/income-info/get")
+
+	mux.HandleFunc("/debug/income-info/get-all", func(w http.ResponseWriter, req *http.Request) {
+		incInfo, err := m.GetAllIncomeInfo(context.Background())
+		if err != nil {
+			logger.Warn("error get all income info", zap.Any("err", err))
+			http.Error(w, fmt.Sprintf("failed check income info: %v", err), http.StatusInternalServerError)
+			return
+		}
+
+		w.Write((marshalResponse(incInfo)))
+	})
+	logger.Sugar().Info("handle rout: /debug/income-info/get-all")
 }
 
 func incomeInfoFromRequest(req *http.Request) (*entity.IncomeInfo, error) {
