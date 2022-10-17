@@ -39,3 +39,13 @@ func (m *Manager) GetAllIncomeInfo(ctx context.Context) ([]*entity.IncomeInfo, e
 
 	return incInfo, nil
 }
+
+func (m *Manager) DeleteIncomeInfo(ctx context.Context, userID int64) error {
+	m.logger.Info("income info")
+
+	err := m.storage.DeleteIncomeInfo(ctx, userID)
+	if err != nil {
+		return errors.Wrap(err, "delete income info in db")
+	}
+	return nil
+}

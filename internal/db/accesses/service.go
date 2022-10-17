@@ -19,6 +19,7 @@ type Implementation interface {
 	SaveIncomeInfo(ctx context.Context, info *entity.IncomeInfo) error
 	GetIncomeInfoByID(ctx context.Context, userID int64, botType string) ([]*entity.IncomeInfo, error)
 	GetAllIncomeInfo(ctx context.Context) ([]*entity.IncomeInfo, error)
+	DeleteIncomeInfo(ctx context.Context, userId int64) error
 }
 
 type Storage struct {

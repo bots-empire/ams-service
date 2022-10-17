@@ -186,6 +186,29 @@ func incomeInfoRouts(mux *http.ServeMux, m *service.Manager, logger *zap.Logger)
 		w.Write((marshalResponse(incInfo)))
 	})
 	logger.Sugar().Info("handle rout: /debug/income-info/get-all")
+
+	mux.HandleFunc("/v1/income-info/delete", func(w http.ResponseWriter, req *http.Request) {
+		incInfo, err := incomeInfoFromRequest(req)
+		if err != nil {
+			logger.Warn("error parse entity", zap.Any("err", err))
+			http.Error(w, fmt.Sprintf("failed to parse entity: %v", err), http.StatusUnprocessableEntity)
+			return
+		}
+
+		if err = incInfo.ValidateAdd(); err != nil {
+			logger.Warn("error validate income info", zap.Any("err", err))
+			http.Error(w, fmt.Sprintf("error in validate income info: %v", err), http.StatusUnprocessableEntity)
+			return
+		}
+
+		err = m.DeleteIncomeInfo(context.Background(), incInfo.UserID)
+		if err != nil {
+			logger.Warn("error delete income info", zap.Any("err", err))
+			http.Error(w, fmt.Sprintf("failed deletet income info: %v", err), http.StatusInternalServerError)
+			return
+		}
+	})
+	logger.Sugar().Info("handle rout: /v1/income-info/delete")
 }
 
 func incomeInfoFromRequest(req *http.Request) (*entity.IncomeInfo, error) {
