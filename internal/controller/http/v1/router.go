@@ -130,6 +130,13 @@ func usersRouts(mux *http.ServeMux, m *service.Manager, logger *zap.Logger) {
 func incomeInfoRouts(mux *http.ServeMux, m *service.Manager, logger *zap.Logger) {
 	mux.HandleFunc("/v1/income-info/add", func(w http.ResponseWriter, req *http.Request) {
 		incInfo, err := incomeInfoFromRequest(req)
+		if req.Body == nil {
+			logger.Warn("error nil body")
+			http.Error(w, fmt.Sprintf("error nil body: %v", err), http.StatusUnprocessableEntity)
+			return
+		}
+
+		//req.Close = true
 		if err != nil {
 			logger.Warn("error parse entity", zap.Any("err", err))
 			http.Error(w, fmt.Sprintf("failed to parse entity: %v", err), http.StatusUnprocessableEntity)
