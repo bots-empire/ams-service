@@ -7,7 +7,7 @@ import (
 	"github.com/lib/pq"
 	"github.com/pkg/errors"
 
-	"ams-service/internal/entity"
+	"github.com/bots-empire/ams-service/internal/entity"
 )
 
 const getUserIDsQuery = `SELECT user_id, additional

@@ -9,13 +9,13 @@ import (
 
 	"go.uber.org/zap"
 
-	"ams-service/internal/config"
-	v1 "ams-service/internal/controller/http/v1"
-	"ams-service/internal/db"
-	"ams-service/internal/db/accesses"
-	"ams-service/internal/httpserver"
-	"ams-service/internal/log"
-	"ams-service/internal/service"
+	"github.com/bots-empire/ams-service/internal/config"
+	v1 "github.com/bots-empire/ams-service/internal/controller/http/v1"
+	"github.com/bots-empire/ams-service/internal/db"
+	"github.com/bots-empire/ams-service/internal/db/accesses"
+	"github.com/bots-empire/ams-service/internal/httpserver"
+	"github.com/bots-empire/ams-service/internal/log"
+	"github.com/bots-empire/ams-service/internal/service"
 )
 
 func main() {

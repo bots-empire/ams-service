@@ -3,7 +3,7 @@ package service
 import (
 	"go.uber.org/zap"
 
-	"ams-service/internal/db/accesses"
+	"github.com/bots-empire/ams-service/internal/db/accesses"
 )
 
 type Manager struct {

@@ -5,7 +5,7 @@ import (
 
 	"github.com/jackc/pgx/v4/pgxpool"
 
-	"ams-service/internal/entity"
+	"github.com/bots-empire/ams-service/internal/entity"
 )
 
 type Implementation interface {

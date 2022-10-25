@@ -5,7 +5,7 @@ import (
 
 	"github.com/pkg/errors"
 
-	"ams-service/internal/entity"
+	"github.com/bots-empire/ams-service/internal/entity"
 )
 
 func (s *Storage) GetAll(ctx context.Context, userID int64) ([]*entity.Access, error) {

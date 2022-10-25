@@ -1,4 +1,4 @@
-module ams-service
+module github.com/bots-empire/ams-service
 
 go 1.18
 

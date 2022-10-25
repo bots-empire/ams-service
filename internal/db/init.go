@@ -1,11 +1,12 @@
 package db
 
 import (
-	"ams-service/db"
 	"context"
 	"database/sql"
 	"fmt"
 	"log"
+
+	"github.com/bots-empire/ams-service/db"
 
 	"github.com/jackc/pgx/v4/pgxpool"
 	"github.com/pkg/errors"
@@ -16,7 +17,7 @@ const dbDriver = "postgres"
 
 func InitDataBase(ctx context.Context, cfg *pgxpool.Config) (*pgxpool.Pool, error) {
 	dataBase, err := sql.Open(dbDriver, fmt.Sprintf("host=%s port=%d user=%s password=%s dbname=%s sslmode=disable",
-		"localhost", 6543, "ams-user", "26538hsvgn8p", "ams-service"))
+		"psql-ams", 5432, "ams-user", "26538hsvgn8p", "ams-service"))
 	if err != nil {
 		log.Fatalf("Failed open database: %s\n", err.Error())
 	}

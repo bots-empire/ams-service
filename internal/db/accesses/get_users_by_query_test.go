@@ -4,7 +4,7 @@ import (
 	"reflect"
 	"testing"
 
-	"ams-service/internal/entity"
+	"github.com/bots-empire/ams-service/internal/entity"
 )
 
 func TestStorage_getMatchIDs(t *testing.T) {

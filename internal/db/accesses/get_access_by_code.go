@@ -7,7 +7,7 @@ import (
 	"github.com/lib/pq"
 	"github.com/pkg/errors"
 
-	"ams-service/internal/entity"
+	"github.com/bots-empire/ams-service/internal/entity"
 )
 
 const getAccessQuery = `SELECT user_id, code, additional, user_name, user_first_name, user_last_name

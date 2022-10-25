@@ -1,10 +1,12 @@
 package accesses
 
 import (
-	"ams-service/internal/entity"
 	"context"
+
 	"github.com/jackc/pgx/v4"
 	"github.com/pkg/errors"
+
+	"github.com/bots-empire/ams-service/internal/entity"
 )
 
 const getIncomeInfoQuery = `SELECT user_id, bot_link, bot_name, income_source, type_bot

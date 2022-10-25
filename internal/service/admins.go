@@ -6,7 +6,7 @@ import (
 	"github.com/pkg/errors"
 	"go.uber.org/zap"
 
-	"ams-service/internal/entity"
+	"github.com/bots-empire/ams-service/internal/entity"
 )
 
 func (m *Manager) GetAdminsID(ctx context.Context, query *entity.AdminsQuery) ([]int64, error) {
