@@ -2,13 +2,13 @@ package service
 
 import (
 	"context"
-	"github.com/bots-empire/ams-service/model"
 	"strconv"
 
 	"github.com/pkg/errors"
 	"go.uber.org/zap"
 
 	"github.com/bots-empire/ams-service/internal/entity"
+	"github.com/bots-empire/ams-service/internal/model"
 )
 
 func (m *Manager) AddIncomeInfo(ctx context.Context, add *entity.IncomeInfo) error {

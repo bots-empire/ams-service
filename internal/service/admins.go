@@ -2,12 +2,12 @@ package service
 
 import (
 	"context"
-	"github.com/bots-empire/ams-service/model"
 
 	"github.com/pkg/errors"
 	"go.uber.org/zap"
 
 	"github.com/bots-empire/ams-service/internal/entity"
+	"github.com/bots-empire/ams-service/internal/model"
 )
 
 func (m *Manager) GetAdminsID(ctx context.Context, query *entity.AdminsQuery) ([]int64, error) {

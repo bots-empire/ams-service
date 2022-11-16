@@ -10,8 +10,8 @@ import (
 	"go.uber.org/zap"
 
 	"github.com/bots-empire/ams-service/internal/entity"
+	"github.com/bots-empire/ams-service/internal/model"
 	"github.com/bots-empire/ams-service/internal/service"
-	"github.com/bots-empire/ams-service/model"
 )
 
 func HandleRouts(mux *http.ServeMux, m *service.Manager, logger *zap.Logger) {
