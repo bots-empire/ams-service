@@ -2,6 +2,7 @@ package service
 
 import (
 	"context"
+	"github.com/bots-empire/ams-service/model"
 
 	"github.com/pkg/errors"
 	"go.uber.org/zap"
@@ -12,6 +13,9 @@ import (
 func (m *Manager) GetAdminsID(ctx context.Context, query *entity.AdminsQuery) ([]int64, error) {
 	m.logger.Info("get admins", zap.Any("query", query))
 
+	model.TotalGetAdmins.WithLabelValues(
+		query.Code,
+	).Inc()
 	ids, err := m.storage.GetUsersByQuery(ctx, query)
 	if err != nil {
 		return nil, errors.Wrap(err, "get from db")

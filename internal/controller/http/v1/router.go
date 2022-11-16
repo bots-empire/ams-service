@@ -4,9 +4,8 @@ import (
 	"context"
 	"encoding/json"
 	"fmt"
-	"net/http"
-
 	"go.uber.org/zap"
+	"net/http"
 
 	"github.com/bots-empire/ams-service/internal/entity"
 	"github.com/bots-empire/ams-service/internal/service"
