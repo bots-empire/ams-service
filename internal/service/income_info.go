@@ -2,6 +2,7 @@ package service
 
 import (
 	"context"
+	"github.com/bots-empire/ams-service/model"
 
 	"github.com/pkg/errors"
 	"go.uber.org/zap"
@@ -12,6 +13,10 @@ import (
 func (m *Manager) AddIncomeInfo(ctx context.Context, add *entity.IncomeInfo) error {
 	m.logger.Info("income info", zap.Any("income info", add))
 
+	model.TotalAddedIncome.WithLabelValues(
+		add.BotLink,
+		add.BotName,
+	).Inc()
 	err := m.storage.SaveIncomeInfo(ctx, add)
 	if err != nil {
 		return errors.Wrap(err, "save income info in db")
