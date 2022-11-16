@@ -6,7 +6,6 @@ import (
 )
 
 var (
-	//Income
 	TotalAddedIncome = promauto.NewCounterVec(
 		prometheus.CounterOpts{
 			Name: "total_added_income_users",
@@ -23,8 +22,6 @@ var (
 		[]string{"user_id", "bot_type"},
 	)
 
-	//Accesses
-
 	TotalCheckedAccesses = promauto.NewCounterVec(
 		prometheus.CounterOpts{
 			Name: "total_checked_accesses",
@@ -40,7 +37,6 @@ var (
 		},
 		[]string{"user_id", "user_first_name"},
 	)
-	//Users
 
 	TotalGetAdmins = promauto.NewCounterVec(
 		prometheus.CounterOpts{
@@ -50,31 +46,11 @@ var (
 		[]string{"query_code"},
 	)
 
-	//response time
-
-	TimeUserRoutes = prometheus.NewHistogramVec(
+	ResponseTime = prometheus.NewHistogramVec(
 		prometheus.HistogramOpts{
-			Name:    "time_user_routes",
-			Help:    "Response time of user route",
-			Buckets: []float64{0.1, 0.5, 0.9, 1},
-		},
-		[]string{"handler"},
-	)
-
-	TimeAccessesRoutes = prometheus.NewHistogramVec(
-		prometheus.HistogramOpts{
-			Name:    "time_accesses_routes",
-			Help:    "Response time of accesses route",
-			Buckets: []float64{0.1, 0.5, 0.9, 1},
-		},
-		[]string{"handler"},
-	)
-
-	TimeIncomeRoutes = prometheus.NewHistogramVec(
-		prometheus.HistogramOpts{
-			Name:    "time_income_info_routes",
-			Help:    "Response time of income info route",
-			Buckets: []float64{0.1, 0.5, 0.9, 1},
+			Name:    "response_time",
+			Help:    "Response time of route",
+			Buckets: []float64{0.1, 0.5, 0.9, 1, 5, 10},
 		},
 		[]string{"handler"},
 	)

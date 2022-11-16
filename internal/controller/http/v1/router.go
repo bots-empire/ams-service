@@ -4,11 +4,14 @@ import (
 	"context"
 	"encoding/json"
 	"fmt"
-	"go.uber.org/zap"
 	"net/http"
+	"time"
+
+	"go.uber.org/zap"
 
 	"github.com/bots-empire/ams-service/internal/entity"
 	"github.com/bots-empire/ams-service/internal/service"
+	"github.com/bots-empire/ams-service/model"
 )
 
 func HandleRouts(mux *http.ServeMux, m *service.Manager, logger *zap.Logger) {
@@ -19,8 +22,16 @@ func HandleRouts(mux *http.ServeMux, m *service.Manager, logger *zap.Logger) {
 	incomeInfoRouts(mux, m, logger)
 }
 
+func wrapTimeMetric(route string, handler func(http.ResponseWriter, *http.Request)) (string, func(http.ResponseWriter, *http.Request)) {
+	return route, func(w http.ResponseWriter, req *http.Request) {
+		st := time.Now()
+		handler(w, req)
+		model.ResponseTime.WithLabelValues(route).Observe(float64(time.Now().Sub(st)))
+	}
+}
+
 func accessRouts(mux *http.ServeMux, m *service.Manager, logger *zap.Logger) {
-	mux.HandleFunc("/v1/accesses/check", func(w http.ResponseWriter, req *http.Request) {
+	mux.HandleFunc(wrapTimeMetric("/v1/accesses/check", func(w http.ResponseWriter, req *http.Request) {
 		acs, err := accessesFromRequest(req)
 		if err != nil {
 			logger.Warn("error parse entity", zap.Any("err", err))
@@ -46,10 +57,10 @@ func accessRouts(mux *http.ServeMux, m *service.Manager, logger *zap.Logger) {
 			w.WriteHeader(http.StatusForbidden)
 			return
 		}
-	})
+	}))
 	logger.Sugar().Info("hadle rout: /v1/accesses/check")
 
-	mux.HandleFunc("/v1/accesses/add", func(w http.ResponseWriter, req *http.Request) {
+	mux.HandleFunc(wrapTimeMetric("/v1/accesses/add", func(w http.ResponseWriter, req *http.Request) {
 		acs, err := accessesFromRequest(req)
 		if err != nil {
 			logger.Warn("error parse entity", zap.Any("err", err))
@@ -69,10 +80,10 @@ func accessRouts(mux *http.ServeMux, m *service.Manager, logger *zap.Logger) {
 			http.Error(w, fmt.Sprintf("failed add access: %v", err), http.StatusInternalServerError)
 			return
 		}
-	})
+	}))
 	logger.Sugar().Info("hadle rout: /v1/accesses/add")
 
-	mux.HandleFunc("/v1/accesses/deprive", func(w http.ResponseWriter, req *http.Request) {
+	mux.HandleFunc(wrapTimeMetric("/v1/accesses/deprive", func(w http.ResponseWriter, req *http.Request) {
 		acs, err := accessesFromRequest(req)
 		if err != nil {
 			http.Error(w, fmt.Sprintf("failed to parse access: %v", err), http.StatusUnprocessableEntity)
@@ -84,12 +95,12 @@ func accessRouts(mux *http.ServeMux, m *service.Manager, logger *zap.Logger) {
 			http.Error(w, fmt.Sprintf("failed check access: %v", err), http.StatusInternalServerError)
 			return
 		}
-	})
+	}))
 	logger.Sugar().Info("hadle rout: /v1/accesses/deprive")
 }
 
 func usersRouts(mux *http.ServeMux, m *service.Manager, logger *zap.Logger) {
-	mux.HandleFunc("/v1/admins/get", func(w http.ResponseWriter, req *http.Request) {
+	mux.HandleFunc(wrapTimeMetric("/v1/admins/get", func(w http.ResponseWriter, req *http.Request) {
 		query, err := adminQueryFromRequest(req)
 		if err != nil {
 			http.Error(w, fmt.Sprintf("failed to parse query: %v", err), http.StatusUnprocessableEntity)
@@ -110,10 +121,10 @@ func usersRouts(mux *http.ServeMux, m *service.Manager, logger *zap.Logger) {
 		}
 
 		w.Write(marshalResponse(ids))
-	})
+	}))
 	logger.Sugar().Info("hadle rout: /v1/admins/get")
 
-	mux.HandleFunc("/debug/admins/get-all", func(w http.ResponseWriter, req *http.Request) {
+	mux.HandleFunc(wrapTimeMetric("/debug/admins/get-all", func(w http.ResponseWriter, req *http.Request) {
 		admins, err := m.GetAllAdmins(context.Background())
 		if err != nil {
 			logger.Warn("error get all admins", zap.Any("err", err))
@@ -122,12 +133,12 @@ func usersRouts(mux *http.ServeMux, m *service.Manager, logger *zap.Logger) {
 		}
 
 		w.Write(marshalResponse(admins))
-	})
+	}))
 	logger.Sugar().Info("hadle rout: /debug/admins/get-all")
 }
 
 func incomeInfoRouts(mux *http.ServeMux, m *service.Manager, logger *zap.Logger) {
-	mux.HandleFunc("/v1/income-info/add", func(w http.ResponseWriter, req *http.Request) {
+	mux.HandleFunc(wrapTimeMetric("/v1/income-info/add", func(w http.ResponseWriter, req *http.Request) {
 		incInfo, err := incomeInfoFromRequest(req)
 		if err != nil {
 			logger.Warn("error parse entity", zap.Any("err", err))
@@ -147,10 +158,10 @@ func incomeInfoRouts(mux *http.ServeMux, m *service.Manager, logger *zap.Logger)
 			http.Error(w, fmt.Sprintf("failed add income info: %v", err), http.StatusInternalServerError)
 			return
 		}
-	})
+	}))
 	logger.Sugar().Info("hadle rout: /v1/income-info/add")
 
-	mux.HandleFunc("/v1/income-info/get", func(w http.ResponseWriter, req *http.Request) {
+	mux.HandleFunc(wrapTimeMetric("/v1/income-info/get", func(w http.ResponseWriter, req *http.Request) {
 		query, err := incomeInfoFromRequest(req)
 		if err != nil {
 			http.Error(w, fmt.Sprintf("failed to parse query: %v", err), http.StatusUnprocessableEntity)
@@ -171,7 +182,7 @@ func incomeInfoRouts(mux *http.ServeMux, m *service.Manager, logger *zap.Logger)
 		}
 
 		w.Write(marshalResponse(ids))
-	})
+	}))
 	logger.Sugar().Info("hadle rout: /v1/income-info/get")
 }
 
