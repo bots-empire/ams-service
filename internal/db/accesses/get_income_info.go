@@ -10,9 +10,9 @@ import (
 )
 
 const getIncomeInfoQuery = `SELECT user_id, bot_link, bot_name, income_source, type_bot
-FROM ams.income_info WHERE user_id = $1 AND type_bot = $2`
+FROM ams.income_info WHERE user_id = $1 AND type_bot = $2;`
 
-func (s *Storage) GetIncomeInfoByID(ctx context.Context, userID int64, botType string) (*entity.IncomeInfo, error) {
+func (s *Storage) GetIncomeInfoByID(ctx context.Context, userID int64, botType string) ([]*entity.IncomeInfo, error) {
 	rows, err := s.db.Query(
 		ctx,
 		getIncomeInfoQuery,
@@ -26,16 +26,11 @@ func (s *Storage) GetIncomeInfoByID(ctx context.Context, userID int64, botType s
 	defer rows.Close()
 
 	incomeInfo, err := readIncomeInfoRows(rows)
-
 	if err != nil {
 		return nil, errors.Wrap(err, "failed read income info")
 	}
 
-	if len(incomeInfo) == 0 {
-		return nil, nil
-	}
-
-	return incomeInfo[0], nil
+	return incomeInfo, nil
 }
 
 func readIncomeInfoRows(rows pgx.Rows) ([]*entity.IncomeInfo, error) {
