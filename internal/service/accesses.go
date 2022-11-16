@@ -2,6 +2,8 @@ package service
 
 import (
 	"context"
+	"github.com/bots-empire/ams-service/model"
+	"strconv"
 
 	"github.com/pkg/errors"
 	"go.uber.org/zap"
@@ -11,6 +13,11 @@ import (
 
 func (m *Manager) CheckAccess(ctx context.Context, check *entity.Access) (bool, error) {
 	m.logger.Info("check access", zap.Any("access", check))
+
+	model.TotalCheckedAccesses.WithLabelValues(
+		strconv.FormatInt(check.UserID, 10),
+		check.UserFirstName,
+	).Inc()
 
 	if m.checkWhiteList(check.UserID) {
 		return true, nil
@@ -63,6 +70,11 @@ func contains(s []string, e string) bool {
 
 func (m *Manager) AddAccess(ctx context.Context, add *entity.Access) error {
 	m.logger.Info("add access", zap.Any("access", add))
+
+	model.TotalAddedAccesses.WithLabelValues(
+		strconv.FormatInt(add.UserID, 10),
+		add.UserFirstName,
+	).Inc()
 
 	acs, err := m.storage.GetByCode(ctx, add.UserID, add.Code)
 	if err != nil {
