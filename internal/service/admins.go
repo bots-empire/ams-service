@@ -2,8 +2,7 @@ package service
 
 import (
 	"context"
-	"github.com/bots-empire/ams-service/model"
-
+	"github.com/bots-empire/ams-service/internal/model"
 	"github.com/pkg/errors"
 	"go.uber.org/zap"
 

@@ -2,7 +2,7 @@ package service
 
 import (
 	"context"
-	"github.com/bots-empire/ams-service/model"
+	"github.com/bots-empire/ams-service/internal/model"
 	"strconv"
 
 	"github.com/pkg/errors"

@@ -4,6 +4,7 @@ import (
 	"context"
 	"encoding/json"
 	"fmt"
+	"github.com/bots-empire/ams-service/internal/model"
 	"net/http"
 	"time"
 
@@ -11,7 +12,6 @@ import (
 
 	"github.com/bots-empire/ams-service/internal/entity"
 	"github.com/bots-empire/ams-service/internal/service"
-	"github.com/bots-empire/ams-service/model"
 )
 
 func HandleRouts(mux *http.ServeMux, m *service.Manager, logger *zap.Logger) {
