@@ -11,7 +11,7 @@ var (
 			Name: "total_added_income_users",
 			Help: "Total count of added income users",
 		},
-		[]string{"bot_link", "bot_name"},
+		[]string{"bot_link", "bot_name", "income_source", "bot_type"},
 	)
 
 	TotalGetIncome = promauto.NewCounterVec(
