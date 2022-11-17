@@ -17,6 +17,8 @@ func (m *Manager) AddIncomeInfo(ctx context.Context, add *entity.IncomeInfo) err
 	model.TotalAddedIncome.WithLabelValues(
 		add.BotLink,
 		add.BotName,
+		add.IncomeSource,
+		add.TypeBot,
 	).Inc()
 
 	err := m.storage.SaveIncomeInfo(ctx, add)
